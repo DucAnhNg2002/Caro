@@ -9,10 +9,10 @@ import java.awt.*;
 @Setter
 @Getter
 public class CaroView extends JFrame {
-    private final CaroController caroController;
-    private final JButton[][] buttons;
-    private final int sizeButton = 45;
-    private final int preBotMove[] = {0, 0};
+    private CaroController caroController;
+    private JButton[][] buttons;
+    private int sizeButton = 40;
+    private int[] preBotMove = {0, 0};
     private boolean isEndGame = false;
     private boolean isWaiting = false;
     private static CaroView caroView = null;
@@ -21,20 +21,21 @@ public class CaroView extends JFrame {
         caroController = CaroController.getInstance();
         int sizeMatrix = caroController.getSizeMatrix();
 
-        this.setSize(sizeButton * sizeMatrix, sizeButton * sizeMatrix);
-        this.setLocationRelativeTo(null);
         this.setTitle("Caro");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
 
+        JPanel mainView = new JPanel();
+        mainView.setLayout(new BorderLayout());
         buttons = new JButton[sizeMatrix + 1][sizeMatrix + 1];
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(sizeMatrix, sizeMatrix));
-
+        JPanel panelButtons = new JPanel();
+        panelButtons.setLayout(new GridLayout(sizeMatrix, sizeMatrix));
+        panelButtons.setSize(sizeMatrix * sizeButton, sizeMatrix * sizeButton);
+        panelButtons.setPreferredSize(new Dimension(500, 500));
         for(int i = 1; i <= sizeMatrix; i++) {
             for(int j = 1; j <= sizeMatrix; j++) {
                 JButton button = new JButton();
-                Font font = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+                Font font = new Font(Font.SANS_SERIF, Font.ITALIC | Font.BOLD, sizeButton - 10);
                 button.setFont(font);
                 button.setBackground(Color.WHITE);
                 button.setMargin(new Insets(0, 0, 0, 0));
@@ -43,17 +44,51 @@ public class CaroView extends JFrame {
                 int finalJ = j;
                 button.addActionListener(e -> {
                     if(buttons[finalI][finalJ].getText().length() == 0) {
-                        if(isEndGame == false) {
+                        if(!isEndGame) {
                             caroController.playerMove(finalI, finalJ);
                         }
                     }
                 });
-                panel.add(button);
+                panelButtons.add(button);
                 buttons[i][j] = button;
             }
         }
-        this.add(panel);
+
+
+        JPanel panelImage = new JPanel();
+        panelImage.setLayout(new BorderLayout());
+        ImageIcon image = new ImageIcon("./assets/caro.png");
+        Image originalImage = image.getImage();
+        int newWidth = (int) (originalImage.getWidth(null) * .5);
+        int newHeight = (int) (originalImage.getHeight(null) * .5);
+        Image resizedImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+        JPanel panelButtonStartGame = new JPanel();
+        panelButtonStartGame.setLayout(new FlowLayout());
+        JButton buttonStartGame = new JButton("Play");
+        buttonStartGame.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+        buttonStartGame.setBackground(Color.WHITE);
+        buttonStartGame.setMargin(new Insets(0, 0, 0, 0));
+        buttonStartGame.setPreferredSize(new Dimension(150, 50));
+        panelButtonStartGame.add(buttonStartGame);
+
+        panelImage.add(new JLabel(resizedIcon), BorderLayout.NORTH);
+        panelImage.add(panelButtonStartGame);
+
+        JPanel panelNotification = new JPanel();
+        JLabel label = new JLabel();
+        label.setFont(new Font(Font.SANS_SERIF, Font.ITALIC | Font.BOLD, 25));
+        label.setText("Game in progress ...");
+        panelNotification.add(label);
+
+        mainView.add(panelButtons, BorderLayout.CENTER);
+        mainView.add(panelImage, BorderLayout.EAST);
+        mainView.add(panelNotification, BorderLayout.SOUTH);
+
+        this.add(mainView);
         this.pack();
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
     public static CaroView getInstance() {
@@ -63,21 +98,15 @@ public class CaroView extends JFrame {
         return caroView;
     }
     public void playerMove(int x, int y) {
-        buttons[x][y].setText("X");
+        buttons[x][y].setText("O");
+        buttons[x][y].setForeground(new Color(0, 70, 140));
     }
     public void botMove(int x, int y) {
-        if(preBotMove[0] != 0 && preBotMove[1] != 0) {
-            buttons[preBotMove[0]][preBotMove[1]].setForeground(Color.BLACK);
-        }
-        buttons[x][y].setText("O");
-        buttons[x][y].setForeground(Color.RED);
-        preBotMove[0] = x;
-        preBotMove[1] = y;
+        buttons[x][y].setText("X");
+        buttons[x][y].setForeground(new Color(200, 0, 0));
+        preBotMove = new int[]{x, y};
     }
     public void endGame(int [][] listPointEnd) {
-        for(int i = 0; i < listPointEnd.length; i++) {
-            buttons[listPointEnd[i][0]][listPointEnd[i][1]].setForeground(Color.RED);
-        }
         isEndGame = true;
     }
 }
