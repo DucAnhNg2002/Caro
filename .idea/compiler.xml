@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="BotCaro" />
         <module name="BTL-AI" />
+        <module name="BTL-TTCS" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
