@@ -1,6 +1,5 @@
 package caro;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -60,8 +59,8 @@ public class CaroModel {
 
         int idx = -1;
         while(true) {
-            int X = x + directionX * idx,
-                Y = y + directionY * idx;
+            int X = x + directionX * idx;
+            int Y = y + directionY * idx;
             if(isValidMove(X, Y)) {
                 if(a[X][Y] == a[x][y] && countPointEmptyV1 == 0) {
                     countPointSame++;
@@ -84,8 +83,8 @@ public class CaroModel {
 
         idx = +1;
         while(true) {
-            int X = x + directionX * idx,
-                Y = y + directionY * idx;
+            int X = x + directionX * idx;
+            int Y = y + directionY * idx;
             if(isValidMove(X, Y)) {
                 if(a[X][Y] == a[x][y] && countPointEmptyV2 == 0) {
                     countPointSame++;
@@ -132,8 +131,8 @@ public class CaroModel {
 
         int idx = -1;
         while(true) {
-            int X = x + directionX * idx,
-                Y = y + directionY * idx;
+            int X = x + directionX * idx;
+            int Y = y + directionY * idx;
             if(isValidMove(X, Y)) {
                 if(a[X][Y] != a[x][y] && a[X][Y] != 0 && countPointEmptyV1 == 0) {
                     countPointOtherV1++;
@@ -164,7 +163,8 @@ public class CaroModel {
                 }
                 else {
                     while(isValidMove(X, Y) && a[X][Y] == 0) {
-                        countPointEmptyV2++; idx++;
+                        countPointEmptyV2++;
+                        idx++;
                         X = x + directionX * idx;
                         Y = y + directionY * idx;
                     }
@@ -308,19 +308,16 @@ public class CaroModel {
     /**
      Check status game
      */
-    private int[][] checkStatusGame(int x, int y, int[] directionModel) {
+    private boolean checkStatusGame(int x, int y, int[] directionModel) {
         if(!isValidMove(x, y)) {
-            return null;
+            return false;
         }
-        int locationPoint[][] = {{x, y}, {-1, -1}, {-1, -1}, {-1, -1}, {-1, -1}};
         int countPoint = 1;
         for(int i = -1; true; i--) {
             int X = x + directionModel[0] * i;
             int Y = y + directionModel[1] * i;
             if(isValidMove(X,Y) && a[X][Y] == a[x][y]) {
                 if(countPoint <= 4) {
-                    locationPoint[countPoint][0] = X;
-                    locationPoint[countPoint][1] = Y;
                     countPoint++;
                 }
             }
@@ -333,8 +330,6 @@ public class CaroModel {
             int Y = y + directionModel[1] * i;
             if(isValidMove(X,Y) && a[X][Y] == a[x][y]) {
                 if(countPoint <= 4) {
-                    locationPoint[countPoint][0] = X;
-                    locationPoint[countPoint][1] = Y;
                     countPoint++;
                 }
             }
@@ -342,18 +337,19 @@ public class CaroModel {
                 break;
             }
         }
-        if(countPoint == 5) {
-            return locationPoint;
-        }
-        return null;
+        return countPoint == 5;
     }
-    public int[][] checkStatusGame(int x,int y) {
+    public boolean checkStatusGame(int x,int y) {
         for(int i = 0; i < directions.length; i++) {
-            int [][] checkStatusGame = checkStatusGame(x, y, directions[i]);
-            if(checkStatusGame != null) {
-                return checkStatusGame;
+            boolean checkStatusGame = checkStatusGame(x, y, directions[i]);
+            if(checkStatusGame) {
+                return true;
             }
         }
-        return null;
+        return false;
+    }
+
+    public void restartGame() {
+        for(int )
     }
 }

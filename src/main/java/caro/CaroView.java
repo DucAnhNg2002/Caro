@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @Setter
 @Getter
@@ -16,7 +18,7 @@ public class CaroView extends JFrame {
     private boolean isEndGame = false;
     private boolean isWaiting = false;
     private static CaroView caroView = null;
-
+    private JLabel labelNotification = null;
     private CaroView() {
         caroController = CaroController.getInstance();
         int sizeMatrix = caroController.getSizeMatrix();
@@ -31,7 +33,6 @@ public class CaroView extends JFrame {
         JPanel panelButtons = new JPanel();
         panelButtons.setLayout(new GridLayout(sizeMatrix, sizeMatrix));
         panelButtons.setSize(sizeMatrix * sizeButton, sizeMatrix * sizeButton);
-        panelButtons.setPreferredSize(new Dimension(500, 500));
         for(int i = 1; i <= sizeMatrix; i++) {
             for(int j = 1; j <= sizeMatrix; j++) {
                 JButton button = new JButton();
@@ -54,7 +55,6 @@ public class CaroView extends JFrame {
             }
         }
 
-
         JPanel panelImage = new JPanel();
         panelImage.setLayout(new BorderLayout());
         ImageIcon image = new ImageIcon("./assets/caro.png");
@@ -71,16 +71,24 @@ public class CaroView extends JFrame {
         buttonStartGame.setBackground(Color.WHITE);
         buttonStartGame.setMargin(new Insets(0, 0, 0, 0));
         buttonStartGame.setPreferredSize(new Dimension(150, 50));
+        buttonStartGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isEndGame = false;
+                labelNotification.setText("Game in progress ...");
+                caroController.
+            }
+        });
         panelButtonStartGame.add(buttonStartGame);
 
         panelImage.add(new JLabel(resizedIcon), BorderLayout.NORTH);
         panelImage.add(panelButtonStartGame);
 
         JPanel panelNotification = new JPanel();
-        JLabel label = new JLabel();
-        label.setFont(new Font(Font.SANS_SERIF, Font.ITALIC | Font.BOLD, 25));
-        label.setText("Game in progress ...");
-        panelNotification.add(label);
+        labelNotification = new JLabel();
+        labelNotification.setFont(new Font(Font.SANS_SERIF, Font.ITALIC | Font.BOLD, 25));
+        labelNotification.setText("Game in progress ...");
+        panelNotification.add(labelNotification);
 
         mainView.add(panelButtons, BorderLayout.CENTER);
         mainView.add(panelImage, BorderLayout.EAST);
@@ -106,7 +114,8 @@ public class CaroView extends JFrame {
         buttons[x][y].setForeground(new Color(200, 0, 0));
         preBotMove = new int[]{x, y};
     }
-    public void endGame(int [][] listPointEnd) {
+    public void endGame(String endGame) {
         isEndGame = true;
+        labelNotification.setText(endGame);
     }
 }
