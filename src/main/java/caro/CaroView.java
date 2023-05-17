@@ -76,7 +76,12 @@ public class CaroView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 isEndGame = false;
                 labelNotification.setText("Game in progress ...");
-                caroController.
+                caroController.restartGame();
+                for(int i = 1; i <= sizeMatrix; i++) {
+                    for(int j = 1; j <= sizeMatrix; j++) {
+                        buttons[i][j].setText("");
+                    }
+                }
             }
         });
         panelButtonStartGame.add(buttonStartGame);

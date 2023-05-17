@@ -350,6 +350,10 @@ public class CaroModel {
     }
 
     public void restartGame() {
-        for(int )
+        for(int i = 1; i <= sizeMatrix; i++) {
+            for(int j = 1; j <= sizeMatrix; j++) {
+                a[i][j] = 0;
+            }
+        }
     }
 }

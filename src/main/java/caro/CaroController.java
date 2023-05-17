@@ -39,6 +39,6 @@ public class CaroController {
     }
 
     public void restartGame() {
-        caroModel.reStartGame();
+        caroModel.restartGame();
     }
 }
