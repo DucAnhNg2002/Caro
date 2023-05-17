@@ -19,8 +19,8 @@ public class CaroController {
         // Event Player Click
         CaroModel.getInstance().playerMove(x, y);
         CaroView.getInstance().playerMove(x, y);
-        boolean checkStatusGame = CaroModel.getInstance().checkStatusGame(x, y);
-        if(checkStatusGame) {
+        Integer checkStatusGame = CaroModel.getInstance().checkStatusGame(x, y);
+        if(checkStatusGame != 0) {
             CaroView.getInstance().endGame("You Win !");
         }
         else {
@@ -32,8 +32,8 @@ public class CaroController {
         int bestMove[] = CaroModel.getInstance().findBestMove();
         CaroModel.getInstance().botMove(bestMove[0], bestMove[1]);
         CaroView.getInstance().botMove(bestMove[0], bestMove[1]);
-        boolean checkStatusGame = CaroModel.getInstance().checkStatusGame(bestMove[0], bestMove[1]);
-        if(checkStatusGame) {
+        int checkStatusGame = CaroModel.getInstance().checkStatusGame(bestMove[0], bestMove[1]);
+        if(checkStatusGame != 0) {
             CaroView.getInstance().endGame("Bot Win !");
         }
     }

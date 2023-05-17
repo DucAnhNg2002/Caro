@@ -209,7 +209,7 @@ public class CaroModel {
     /**
      Status game
      */
-    private int evaluate(int x, int y, int[] directionModel) {
+    private int checkStatusGame(int x, int y, int[] directionModel) {
         if(!isValidMove(x, y)) {
             return 0;
         }
@@ -239,16 +239,16 @@ public class CaroModel {
         }
         return 0;
     }
-    private int evaluate(int x,int y) {
+    public int checkStatusGame(int x,int y) {
         for(int i = 0; i < directions.length; i++) {
-            int score = evaluate(x, y, directions[i]);
+            int score = checkStatusGame(x, y, directions[i]);
             if(score == Integer.MIN_VALUE || score == Integer.MAX_VALUE)
                 return score;
         }
         return 0;
     }
     private long alphaBeta(boolean isBot, int depth, long alpha, long beta, int preX,int preY) {
-        int scoreEvaluate = evaluate(preX, preY);
+        int scoreEvaluate = checkStatusGame(preX, preY);
         if(scoreEvaluate == Integer.MIN_VALUE || scoreEvaluate == Integer.MAX_VALUE || depth >= maxDepth) {
             return scoreEvaluate;
         }
@@ -298,57 +298,15 @@ public class CaroModel {
         return new int[]{x, y};
     }
     public void botMove(int x, int y) {
-        a[x][y] = 1;
+        if(isValidMove(x,y)) {
+            a[x][y] = 1;
+        }
     }
     public void playerMove(int x, int y) {
         if(isValidMove(x,y)) {
             a[x][y] = -1;
         }
     }
-    /**
-     Check status game
-     */
-    private boolean checkStatusGame(int x, int y, int[] directionModel) {
-        if(!isValidMove(x, y)) {
-            return false;
-        }
-        int countPoint = 1;
-        for(int i = -1; true; i--) {
-            int X = x + directionModel[0] * i;
-            int Y = y + directionModel[1] * i;
-            if(isValidMove(X,Y) && a[X][Y] == a[x][y]) {
-                if(countPoint <= 4) {
-                    countPoint++;
-                }
-            }
-            else {
-                break;
-            }
-        }
-        for(int i = +1; true; i++) {
-            int X = x + directionModel[0] * i;
-            int Y = y + directionModel[1] * i;
-            if(isValidMove(X,Y) && a[X][Y] == a[x][y]) {
-                if(countPoint <= 4) {
-                    countPoint++;
-                }
-            }
-            else {
-                break;
-            }
-        }
-        return countPoint == 5;
-    }
-    public boolean checkStatusGame(int x,int y) {
-        for(int i = 0; i < directions.length; i++) {
-            boolean checkStatusGame = checkStatusGame(x, y, directions[i]);
-            if(checkStatusGame) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void restartGame() {
         for(int i = 1; i <= sizeMatrix; i++) {
             for(int j = 1; j <= sizeMatrix; j++) {
