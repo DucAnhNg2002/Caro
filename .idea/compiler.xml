@@ -7,9 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="BotCaro" />
         <module name="BTL-AI" />
         <module name="BTL-TTCS" />
+        <module name="Caro" />
+        <module name="BotCaro" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
